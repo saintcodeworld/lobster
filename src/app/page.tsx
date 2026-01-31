@@ -332,6 +332,8 @@ export default function Dashboard() {
     )
   }
 
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? settings?.contract_address
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className={clsx(
@@ -342,14 +344,14 @@ export default function Dashboard() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[120px] mix-blend-screen opacity-40" />
       </div>
 
-      {settings?.contract_address && (
+      {contractAddress && (
         <div className="relative z-20 bg-zinc-950/80 backdrop-blur-sm border-b border-zinc-800/50 py-2">
           <div className="container mx-auto px-4 flex justify-center items-center gap-2 text-xs font-mono">
             <span className="text-zinc-500">CA:</span>
-            <span className="text-zinc-300">{settings.contract_address}</span>
+            <span className="text-zinc-300">{contractAddress}</span>
             <button
               onClick={() => {
-                navigator.clipboard.writeText(settings.contract_address)
+                navigator.clipboard.writeText(contractAddress)
                 toast.success('CA copied to clipboard')
               }}
               className="p-1 hover:bg-zinc-800 rounded transition-colors text-zinc-500 hover:text-white"
