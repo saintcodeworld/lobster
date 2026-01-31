@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       walletBId,
       timeframe: 'DAILY',
       startAt: new Date(),
-      endAt: new Date(Date.now() + 1 * 60 * 60 * 1000),
+      endAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       status: 'LIVE',
       initialBalanceA: portfolioA.solValue * 1e9,
       initialBalanceB: portfolioB.solValue * 1e9,
@@ -107,8 +107,8 @@ export async function POST(request: NextRequest) {
       method: 'POST'
     }).catch(err => console.error('Failed to trigger initial sync:', err))
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       matchId,
       initialPortfolios: {
         walletA: {

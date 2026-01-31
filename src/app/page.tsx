@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import { Copy } from 'lucide-react'
 import { toast } from 'sonner'
+import { CountdownTimer } from '@/components/CountdownTimer'
 
 const CLAUDE_A = {
   name: "Claude",
@@ -408,62 +409,74 @@ export default function Dashboard() {
               </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Card className="bg-gradient-to-br from-red-950/20 to-zinc-900 border-red-800/30 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_A.name} PnL</p>
-                      <p className={clsx(
-                        "text-2xl font-bold font-mono",
-                        statsA.pnl >= 0 ? "text-emerald-400" : "text-red-400"
-                      )}>
-                        {statsA.pnl >= 0 ? '+' : ''}{statsA.pnl.toFixed(2)}%
-                      </p>
+            <div className="relative mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <Card className="bg-gradient-to-br from-red-950/20 to-zinc-900 border-red-800/30 p-6 h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_A.name} PnL</p>
+                        <p className={clsx(
+                          "text-2xl font-bold font-mono",
+                          statsA.pnl >= 0 ? "text-emerald-400" : "text-red-400"
+                        )}>
+                          {statsA.pnl >= 0 ? '+' : ''}{statsA.pnl.toFixed(2)}%
+                        </p>
+                      </div>
+                      <TrendingUp className="text-red-500/30" size={32} />
                     </div>
-                    <TrendingUp className="text-red-500/30" size={32} />
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
-                    <div>
-                      <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_A.name} Trades</p>
-                      <p className="text-2xl font-bold text-white font-mono">{statsA.trades}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+                      <div>
+                        <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_A.name} Trades</p>
+                        <p className="text-2xl font-bold text-white font-mono">{statsA.trades}</p>
+                      </div>
+                      <Activity className="text-red-500/50" size={32} />
                     </div>
-                    <Activity className="text-red-500/50" size={32} />
-                  </div>
-                </Card>
-              </motion.div>
+                  </Card>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Card className="bg-gradient-to-br from-purple-950/20 to-zinc-900 border-purple-800/30 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} PnL</p>
-                      <p className={clsx(
-                        "text-2xl font-bold font-mono",
-                        statsB.pnl >= 0 ? "text-emerald-400" : "text-red-400"
-                      )}>
-                        {statsB.pnl >= 0 ? '+' : ''}{statsB.pnl.toFixed(2)}%
-                      </p>
+                {/* Mobile Timer */}
+                <div className="md:hidden flex justify-center my-2">
+                  {battleConfig?.match?.endAt && <CountdownTimer targetDate={battleConfig.match.endAt} />}
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <Card className="bg-gradient-to-br from-purple-950/20 to-zinc-900 border-purple-800/30 p-6 h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} PnL</p>
+                        <p className={clsx(
+                          "text-2xl font-bold font-mono",
+                          statsB.pnl >= 0 ? "text-emerald-400" : "text-red-400"
+                        )}>
+                          {statsB.pnl >= 0 ? '+' : ''}{statsB.pnl.toFixed(2)}%
+                        </p>
+                      </div>
+                      <TrendingDown className="text-purple-500/30" size={32} />
                     </div>
-                    <TrendingDown className="text-purple-500/30" size={32} />
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
-                    <div>
-                      <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} Trades</p>
-                      <p className="text-2xl font-bold text-white font-mono">{statsB.trades}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+                      <div>
+                        <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} Trades</p>
+                        <p className="text-2xl font-bold text-white font-mono">{statsB.trades}</p>
+                      </div>
+                      <Activity className="text-purple-500/50" size={32} />
                     </div>
-                    <Activity className="text-purple-500/50" size={32} />
-                  </div>
-                </Card>
-              </motion.div>
+                  </Card>
+                </motion.div>
+              </div>
+
+              {/* Desktop Timer - Absolute Centered */}
+              <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                {battleConfig?.match?.endAt && <CountdownTimer targetDate={battleConfig.match.endAt} />}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { db } from '@/lib/db'
-import { matches, wallets, matchStats, rounds } from '@/db/schema'
+import { matches, wallets, matchStats, rounds, bets } from '@/db/schema'
 import { desc, eq, and } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { calculatePortfolioValue } from '@/lib/portfolio-value'
@@ -182,6 +182,57 @@ export async function GET() {
         dailyInitialPortfolioValueA: dailyInitialA,
         dailyInitialPortfolioValueB: dailyInitialB,
         lastDailyResetAt: lastReset
+      })
+    }
+
+    // Check for match completion (24h + 1min buffer)
+    const activeMatchEnd = new Date(activeMatch.endAt).getTime()
+    const nowMs = Date.now()
+
+    if (nowMs > activeMatchEnd + 60 * 1000) {
+      console.log('Match expired, restarting...')
+
+      // 1. Determine winner
+      const winnerId = pnlA > pnlB ? activeMatch.walletAId : activeMatch.walletBId
+
+      // 2. Update old match
+      await db.update(matches)
+        .set({
+          status: 'SETTLED',
+          winnerWalletId: winnerId
+        })
+        .where(eq(matches.id, activeMatch.id))
+
+      // 3. Create new match
+      const newMatchId = nanoid()
+      await db.insert(matches).values({
+        id: newMatchId,
+        walletAId: activeMatch.walletAId,
+        walletBId: activeMatch.walletBId,
+        timeframe: 'DAILY',
+        startAt: new Date(),
+        endAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        status: 'LIVE',
+        initialBalanceA: portfolioA.solValue * 1e9,
+        initialBalanceB: portfolioB.solValue * 1e9,
+        initialPortfolioValueA: portfolioA.totalValueUSD,
+        initialPortfolioValueB: portfolioB.totalValueUSD
+      })
+
+      // 4. Create new round
+      const roundId = nanoid()
+      await db.insert(rounds).values({
+        id: roundId,
+        matchId: newMatchId,
+        roundNumber: 1,
+        startAt: new Date(),
+        status: 'ACTIVE',
+      })
+
+      return NextResponse.json({
+        success: true,
+        message: 'Match restarted',
+        newMatchId
       })
     }
 
