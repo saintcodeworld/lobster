@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  walletAddress String   @unique
+  createdAt     DateTime @default(now())
+  kycStatus     String   @default("NONE")
+  region        String?
+  role          String   @default("USER")
+  
+  bets          Bet[]
+  
+  @@index([walletAddress])
+}
+
+model Wallet {
+  id           String   @id @default(cuid())
+  chain        String
+  address      String
+  label        String?
+  createdAt    DateTime @default(now())
+  isFeatured   Boolean  @default(false)
+  riskTier     String   @default("MEDIUM")
+  
+  pnlPct       Float?
+  pnlUsd       Float?
+  maxDrawdown  Float?
+  volatility   Float?
+  winRate      Float?
+  sharpeApprox Float?
+  lastUpdatedAt DateTime?
+  
+  matchesAsA   Match[]  @relation("WalletA")
+  matchesAsB   Match[]  @relation("WalletB")
+  wonMatches   Match[]  @relation("Winner")
+  
+  @@unique([chain, address])
+  @@index([chain])
+  @@index([isFeatured])
+}
+
+enum MatchTimeframe {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  ENDED
+  SETTLED
+}
+
+model Match {
+  id            String         @id @default(cuid())
+  walletAId     String
+  walletBId     String
+  timeframe     MatchTimeframe
+  startAt       DateTime
+  endAt         DateTime
+  status        MatchStatus    @default(UPCOMING)
+  winnerWalletId String?
+  createdAt     DateTime       @default(now())
+  
+  walletA       Wallet         @relation("WalletA", fields: [walletAId], references: [id])
+  walletB       Wallet         @relation("WalletB", fields: [walletBId], references: [id])
+  winner        Wallet?        @relation("Winner", fields: [winnerWalletId], references: [id])
+  
+  betPool       BetPool?
+  bets          Bet[]
+  settlement    Settlement?
+  
+  @@index([status])
+  @@index([timeframe])
+  @@index([startAt])
+  @@index([endAt])
+}
+
+model BetPool {
+  id          String   @id @default(cuid())
+  matchId     String   @unique
+  poolA       Float    @default(0)
+  poolB       Float    @default(0)
+  totalPool   Float    @default(0)
+  houseFeeBps Int      @default(250)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  match       Match    @relation(fields: [matchId], references: [id])
+}
+
+enum BetSide {
+  A
+  B
+}
+
+enum BetStatus {
+  PENDING
+  SETTLED
+  CANCELLED
+}
+
+model Bet {
+  id            String    @id @default(cuid())
+  userId        String
+  matchId       String
+  side          BetSide
+  amount        Float
+  oddsSnapshot  Float
+  createdAt     DateTime  @default(now())
+  status        BetStatus @default(PENDING)
+  payoutAmount  Float?
+  
+  user          User      @relation(fields: [userId], references: [id])
+  match         Match     @relation(fields: [matchId], references: [id])
+  
+  @@index([userId])
+  @@index([matchId])
+  @@index([status])
+}
+
+model Settlement {
+  id             String   @id @default(cuid())
+  matchId        String   @unique
+  finalPnlA      Float
+  finalPnlB      Float
+  winnerWalletId String
+  settledAt      DateTime @default(now())
+  txHash         String?
+  proofRef       String?
+  
+  match          Match    @relation(fields: [matchId], references: [id])
+  
+  @@index([settledAt])
+}

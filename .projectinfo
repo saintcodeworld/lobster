@@ -1,0 +1,142 @@
+{
+  "name": "2Wallet",
+  "tagline": "Wallet-vs-wallet arenas where users bet on who outperforms in PnL.",
+  "summary": "2Wallet tracks the live performance (PnL%) of many public crypto wallets and turns them into daily/weekly/monthly matchups. Users place pool-based bets (parimutuel), odds update in real time, and settlements happen automatically at the end of each match timeframe.",
+  "product_goals": [
+    "Make wallet performance easy to understand (PnL, drawdown, volatility, allocation).",
+    "Enable fast, fair pool betting with transparent settlement rules.",
+    "Scale to thousands of tracked wallets and concurrent bettors.",
+    "Minimize disputes via clear data provenance + deterministic calculations."
+  ],
+  "core_entities": {
+    "wallet": {
+      "fields": ["id", "chain", "address", "label", "createdAt", "isFeatured", "riskTier"],
+      "derived_metrics": ["pnlPct", "pnlUsd", "maxDrawdown", "volatility", "winRate", "sharpeApprox", "lastUpdatedAt"]
+    },
+    "match": {
+      "fields": ["id", "walletAId", "walletBId", "timeframe", "startAt", "endAt", "status", "winnerWalletId"],
+      "timeframes": ["DAILY", "WEEKLY", "MONTHLY"]
+    },
+    "bet_pool": {
+      "fields": ["id", "matchId", "poolA", "poolB", "totalPool", "houseFeeBps", "createdAt", "updatedAt"]
+    },
+    "bet": {
+      "fields": ["id", "userId", "matchId", "side", "amount", "oddsSnapshot", "createdAt", "status", "payoutAmount"]
+    },
+    "user": {
+      "fields": ["id", "walletAddress", "createdAt", "kycStatus", "region", "role"]
+    },
+    "settlement": {
+      "fields": ["id", "matchId", "finalPnlA", "finalPnlB", "winnerWalletId", "settledAt", "txHash", "proofRef"]
+    }
+  },
+  "key_features": [
+    {
+      "name": "Arena (Wallet Duels)",
+      "details": [
+        "Browse many live matches: Daily Sprints (24h), Weekly Wars (7d), Monthly Marathons (30d).",
+        "Live stats: PnL%, PnL$, allocation, turnover, trade frequency, drawdown.",
+        "Match rules: fixed start/end timestamps, deterministic PnL formula, tie-breakers."
+      ]
+    },
+    {
+      "name": "Pool Betting (Parimutuel)",
+      "details": [
+        "Users choose Wallet A or B and enter amount.",
+        "Odds are implied from pool ratios; show expected payout if A/B wins.",
+        "House fee taken from total pool (basis points)."
+      ]
+    },
+    {
+      "name": "Real-time Updates",
+      "details": [
+        "WebSocket/SSE updates for pools, odds, and wallet metrics.",
+        "Event-driven ingestion from chain indexer → metrics service → frontend."
+      ]
+    },
+    {
+      "name": "Settlement & Payouts",
+      "details": [
+        "At match end: lock pools, compute final PnL, determine winner, distribute payouts.",
+        "Store a verifiable proof reference (snapshot block / source timestamps).",
+        "Dispute window optional (v2)."
+      ]
+    },
+    {
+      "name": "Wallet Discovery & Curation",
+      "details": [
+        "Leaderboards by timeframe and risk tier.",
+        "Featured wallets, tags (degen, stable, memecoin, LP farmer)."
+      ]
+    }
+  ],
+  "pnl_definition": {
+    "default_method": "Time-weighted portfolio value change over the match window using price snapshots (recommended).",
+    "notes": [
+      "PnL is tricky across deposits/withdrawals; time-weighted or share-based equity curve avoids manipulation.",
+      "For v1 you can start with simpler: mark-to-market portfolio value at start vs end + treat transfers as cashflows, but document it clearly."
+    ]
+  },
+  "architecture": {
+    "frontend": "Next.js App Router UI for arenas, match pages, wallet pages, user dashboard.",
+    "backend_api": "Next.js route handlers or separate Node service (Fastify) for bets, pools, auth, admin.",
+    "indexer": "Chain ingestion service that tracks wallet holdings/txs and produces equity curve snapshots.",
+    "realtime": "WebSockets (or SSE) channel for pools/odds/metrics updates.",
+    "storage": "Postgres for product data; Redis for hot odds/pools; optional ClickHouse for time-series metrics."
+  },
+  "tech_stack": {
+    "frontend": [
+      "Next.js (TypeScript)",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "TanStack Query",
+      "zustand (light state)",
+      "recharts (charts)"
+    ],
+    "backend": [
+      "Next.js Route Handlers (or Fastify)",
+      "Prisma ORM",
+      "PostgreSQL",
+      "Redis (Upstash or self-hosted)",
+      "WebSockets via Socket.IO or native ws"
+    ],
+    "web3": [
+      "viem + wagmi (wallet connect, signatures)",
+      "SIWE (Sign-In With Ethereum) for auth",
+      "Indexing providers: Alchemy / QuickNode (EVM), Helius (Solana) depending on chains"
+    ],
+    "infra": [
+      "Docker",
+      "Fly.io / Render / AWS",
+      "Sentry",
+      "OpenTelemetry (optional)"
+    ]
+  },
+  "mvp_scope": [
+    "Single chain (pick one first), curated wallet list (50–200).",
+    "Daily + Weekly matches only.",
+    "Pool betting with off-chain accounting (DB) + optional on-chain escrow later.",
+    "Basic settlement + payouts ledger (even if payouts are simulated at first).",
+    "Real-time odds/pool updates."
+  ],
+  "milestones": [
+    "Week 1: Data model + UI skeleton (arena, match page, wallet page).",
+    "Week 2: Betting engine (pools, bets, odds calc) + realtime updates.",
+    "Week 3: Indexer v1 (wallet equity snapshots) + metrics pipeline.",
+    "Week 4: Settlement job + payouts ledger + admin tools.",
+    "Week 5: Hardening (anti-abuse, monitoring, load test) + launch."
+  ],
+  "risks_and_mitigations": [
+    "PnL manipulation via deposits/withdrawals → use time-weighted equity curve and document rules.",
+    "Indexing accuracy → store snapshot provenance (block/slot, timestamp) and re-compute deterministically.",
+    "Regulatory constraints → geo-fence, require terms, consider 'points' mode for MVP.",
+    "Latency under load → Redis hot paths + push updates via WS + cache wallet metrics."
+  ],
+  "success_metrics": [
+    "DAU/MAU bettors",
+    "Average bets per user",
+    "Settlement dispute rate",
+    "Indexer accuracy (recompute match vs stored result)",
+    "P95 match page update latency"
+  ]
+}
