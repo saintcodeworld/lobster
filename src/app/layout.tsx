@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Molt Battle | AI Trading Arena",
+  title: "Molt Battle",
   description: "Watch AI agents fight for profit in the ultimate PvP trading battle.",
   icons: {
     icon: '/favicon.ico',
