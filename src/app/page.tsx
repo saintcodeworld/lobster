@@ -33,7 +33,7 @@ const CLAUDE_A = {
   model: "Analytical Engine",
   color: "from-orange-500 to-red-600",
   accent: "orange",
-  image: "/AOfPY8VB_400x400.jpg"
+  image: "/mixed.jpg"
 }
 
 const CLAUDE_B = {
