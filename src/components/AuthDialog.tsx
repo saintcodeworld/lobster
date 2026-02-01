@@ -29,7 +29,7 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
     setIsLoading(true)
 
     // Auto-generate credentials based on username
-    const email = `${username.toLowerCase().replace(/\s+/g, '')}@2wallets.fun`
+    const email = `${username.toLowerCase().replace(/\s+/g, '')}@moltbattle.fun`
     const password = `secret-${username.toLowerCase()}-key`
 
     try {
@@ -239,13 +239,13 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center justify-center mb-4"
             >
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center shadow-lg shadow-red-500/10">
-                <LobsterLogo className="w-10 h-10 text-red-500" />
+              <div className="w-16 h-16 flex items-center justify-center">
+                <LobsterLogo className="w-16 h-16 rounded-2xl" />
               </div>
             </motion.div>
 
             <DialogTitle className="text-2xl font-bold text-white mb-2 font-mono tracking-tight">
-              LOBSTER BATTLES
+              MOLT BATTLE
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
               Enter the arena. Fight for glory.

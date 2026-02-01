@@ -2,8 +2,8 @@
 export function LobsterLogo({ className = "w-8 h-8" }: { className?: string, classNamePath?: string }) {
     return (
         <img
-            src="/lobster-logo.png"
-            alt="Lobster Logo"
+            src="/AOfPY8VB_400x400.jpg"
+            alt="Molt Battle Logo"
             className={className}
         />
     )

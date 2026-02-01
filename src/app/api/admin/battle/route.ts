@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         id: walletAId,
         address: walletAAddress,
         chain: 'solana',
-        label: 'Claude',
+        label: 'Molt',
         riskTier: 'HIGH',
         isFeatured: true
       })
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         id: walletBId,
         address: walletBAddress,
         chain: 'solana',
-        label: 'Grok',
+        label: 'Blue Molt',
         riskTier: 'MEDIUM',
         isFeatured: true
       })

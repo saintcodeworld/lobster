@@ -29,19 +29,19 @@ import { toast } from 'sonner'
 import { CountdownTimer } from '@/components/CountdownTimer'
 
 const CLAUDE_A = {
-  name: "Claude",
+  name: "Molt",
   model: "Analytical Engine",
   color: "from-orange-500 to-red-600",
   accent: "orange",
-  image: "/image.png"
+  image: "/AOfPY8VB_400x400.jpg"
 }
 
 const CLAUDE_B = {
-  name: "Grok",
+  name: "Blue Molt",
   model: "Truth Seeker",
-  color: "from-zinc-500 to-zinc-900",
-  accent: "zinc",
-  image: "/image copy 2.png"
+  color: "from-blue-500 to-blue-900",
+  accent: "blue",
+  image: "/bluemolt.png"
 }
 
 export default function Dashboard() {
@@ -304,17 +304,17 @@ export default function Dashboard() {
 
     const allActivities = [
       ...(dataA?.activities || []).map((act: any) => ({
-        wallet: 'SONNET',
+        wallet: 'MOLT',
         pair: act.mint?.slice(0, 4) || 'SOL',
         change: act.change || '0.00',
         color: 'text-red-400',
         type: act.type
       })),
       ...(dataB?.activities || []).map((act: any) => ({
-        wallet: 'OPUS',
+        wallet: 'BLUE MOLT',
         pair: act.mint?.slice(0, 4) || 'SOL',
         change: act.change || '0.00',
-        color: 'text-purple-400',
+        color: 'text-blue-400',
         type: act.type
       }))
     ]
@@ -326,7 +326,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <LobsterLogo className="w-16 h-16 text-primary animate-pulse" />
+          <img src="/mixed.jpg" alt="Loading" className="w-16 h-16 rounded-2xl animate-pulse" />
           <p className="text-zinc-500 font-mono">Loading battle data...</p>
         </div>
       </div>
@@ -342,7 +342,7 @@ export default function Dashboard() {
         !user && "blur-md"
       )}>
         <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-red-500/5 rounded-full blur-[120px] mix-blend-screen opacity-40" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[120px] mix-blend-screen opacity-40" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px] mix-blend-screen opacity-40" />
       </div>
 
       {contractAddress && (
@@ -402,7 +402,7 @@ export default function Dashboard() {
             >
               <div className="flex flex-col sm:flex-row items-center justify-between mb-2">
                 <div>
-                  <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight font-mono text-center sm:text-left">LOBSTER BATTLES ARENA</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight font-mono text-center sm:text-left">MOLT BATTLE</h1>
                 </div>
                 <div className="flex items-center gap-4 mt-4 sm:mt-0">
                 </div>
@@ -449,7 +449,7 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
                 >
-                  <Card className="bg-gradient-to-br from-purple-950/20 to-zinc-900 border-purple-800/30 p-6 h-full">
+                  <Card className="bg-gradient-to-br from-blue-950/20 to-zinc-900 border-blue-800/30 p-6 h-full">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} PnL</p>
@@ -460,14 +460,14 @@ export default function Dashboard() {
                           {statsB.pnl >= 0 ? '+' : ''}{statsB.pnl.toFixed(2)}%
                         </p>
                       </div>
-                      <TrendingDown className="text-purple-500/30" size={32} />
+                      <TrendingDown className="text-blue-500/30" size={32} />
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
                       <div>
                         <p className="text-xs text-zinc-500 uppercase mb-1">{CLAUDE_B.name} Trades</p>
                         <p className="text-2xl font-bold text-white font-mono">{statsB.trades}</p>
                       </div>
-                      <Activity className="text-purple-500/50" size={32} />
+                      <Activity className="text-blue-500/50" size={32} />
                     </div>
                   </Card>
                 </motion.div>
@@ -536,8 +536,8 @@ export default function Dashboard() {
                       className={clsx(
                         "relative p-6 rounded-xl border-2 cursor-pointer transition-all",
                         selectedSide === 'B'
-                          ? "border-purple-500 bg-purple-950/20"
-                          : "border-zinc-800 bg-zinc-900/30 hover:border-purple-600/50"
+                          ? "border-blue-500 bg-blue-950/20"
+                          : "border-zinc-800 bg-zinc-900/30 hover:border-blue-600/50"
                       )}
                       onClick={() => setSelectedSide('B')}
                     >
@@ -574,7 +574,7 @@ export default function Dashboard() {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-zinc-500">Odds</span>
-                          <span className="text-purple-400 font-bold">{oddsB.toFixed(2)}x</span>
+                          <span className="text-blue-400 font-bold">{oddsB.toFixed(2)}x</span>
                         </div>
                       </div>
                     </motion.div>
@@ -593,7 +593,7 @@ export default function Dashboard() {
                         </TabsTrigger>
                         <TabsTrigger
                           value="opus"
-                          className="data-[state=active]:bg-purple-950/30 data-[state=active]:text-purple-400"
+                          className="data-[state=active]:bg-blue-950/30 data-[state=active]:text-blue-400"
                           onClick={() => setSelectedSide('B')}
                         >
                           {CLAUDE_B.name}
@@ -650,7 +650,7 @@ export default function Dashboard() {
                         <div className={clsx(
                           "p-4 rounded-xl border-2 transition-all",
                           selectedSide === 'B'
-                            ? "border-purple-500 bg-purple-950/20"
+                            ? "border-blue-500 bg-blue-950/20"
                             : "border-zinc-800 bg-zinc-900/30"
                         )}>
                           <div className="flex items-center justify-between mb-4">
@@ -686,7 +686,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex justify-between items-center pt-2 border-t border-white/5">
                               <span className="text-xs text-zinc-500">Current Odds</span>
-                              <span className="text-purple-400 font-bold text-lg">{oddsB.toFixed(2)}x</span>
+                              <span className="text-blue-400 font-bold text-lg">{oddsB.toFixed(2)}x</span>
                             </div>
                           </div>
                         </div>
@@ -701,7 +701,7 @@ export default function Dashboard() {
                       animate={{ width: `${(poolA / totalPool) * 100}%` }}
                     />
                     <motion.div
-                      className="absolute right-0 top-0 h-full bg-gradient-to-l from-purple-500 to-purple-600"
+                      className="absolute right-0 top-0 h-full bg-gradient-to-l from-blue-500 to-blue-600"
                       initial={{ width: 0 }}
                       animate={{ width: `${(poolB / totalPool) * 100}%` }}
                     />
@@ -748,7 +748,7 @@ export default function Dashboard() {
                           "p-3 rounded-lg border-2",
                           selectedSide === 'A'
                             ? "border-red-500 bg-red-950/20"
-                            : "border-purple-500 bg-purple-950/20"
+                            : "border-blue-500 bg-blue-950/20"
                         )}>
                           <div className="flex items-center gap-2">
                             {selectedSide === 'A' ? (
@@ -910,7 +910,7 @@ export default function Dashboard() {
                           "p-3 rounded-lg border-2",
                           selectedSide === 'A'
                             ? "border-red-500 bg-red-950/20"
-                            : "border-purple-500 bg-purple-950/20"
+                            : "border-blue-500 bg-blue-950/20"
                         )}>
                           <div className="flex items-center gap-2">
                             {selectedSide === 'A' ? (
@@ -1035,7 +1035,7 @@ export default function Dashboard() {
                           className="flex items-center justify-between p-2 bg-zinc-950/50 rounded border border-zinc-800"
                         >
                           <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${bet.side === 'A' ? 'bg-red-500' : 'bg-purple-500'}`} />
+                            <div className={`w-2 h-2 rounded-full ${bet.side === 'A' ? 'bg-red-500' : 'bg-blue-500'}`} />
                             <span className="text-xs text-zinc-400">{bet.user}</span>
                           </div>
                           <div className="flex items-center gap-3">

@@ -52,12 +52,12 @@ export function Sidebar() {
         {/* Logo Section */}
         <div className="h-20 flex items-center px-6 border-b border-zinc-800/50">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/5 group-hover:shadow-cyan-500/20 transition-all duration-300">
-              <LobsterLogo className="w-7 h-7 text-cyan-500" />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300">
+              <LobsterLogo className="w-8 h-8 rounded-lg" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-lg tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-                LOBSTER BATTLES
+                MOLT BATTLE
               </span>
               <span className="text-[10px] text-zinc-500 font-medium tracking-wide">
                 PVP TRADING

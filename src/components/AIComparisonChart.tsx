@@ -10,7 +10,7 @@ interface ChartProps {
   nameB?: string
 }
 
-export function AIComparisonChart({ dataA, dataB, nameA = "Claude Sonnet", nameB = "Claude Opus" }: ChartProps) {
+export function AIComparisonChart({ dataA, dataB, nameA = "Molt", nameB = "Blue Molt" }: ChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function AIComparisonChart({ dataA, dataB, nameA = "Claude Sonnet", nameB
       data.forEach((value, i) => {
         const x = (i / (data.length - 1)) * width
         const y = height - ((value - minValue) / range) * height
-        
+
         if (i === 0) {
           ctx.moveTo(x, y)
         } else {
@@ -59,7 +59,7 @@ export function AIComparisonChart({ dataA, dataB, nameA = "Claude Sonnet", nameB
     ctx.stroke()
 
     drawLine(dataA, 'rgba(239, 68, 68, 0.8)', 'rgba(239, 68, 68, 0.5)')
-    drawLine(dataB, 'rgba(168, 85, 247, 0.8)', 'rgba(168, 85, 247, 0.5)')
+    drawLine(dataB, 'rgba(59, 130, 246, 0.8)', 'rgba(59, 130, 246, 0.5)')
 
   }, [dataA, dataB])
 
@@ -76,14 +76,14 @@ export function AIComparisonChart({ dataA, dataB, nameA = "Claude Sonnet", nameB
         className="w-full h-full"
         style={{ imageRendering: 'crisp-edges' }}
       />
-      
+
       <div className="absolute top-4 left-4 flex gap-4 text-xs">
         <div className="flex items-center gap-2">
           <div className="w-3 h-0.5 bg-red-500" />
           <span className="text-zinc-400">{nameA}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-0.5 bg-purple-500" />
+          <div className="w-3 h-0.5 bg-blue-500" />
           <span className="text-zinc-400">{nameB}</span>
         </div>
       </div>

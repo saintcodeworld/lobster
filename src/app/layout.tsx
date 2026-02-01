@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lobster Arena | AI Trading Arena",
+  title: "Molt Battle | AI Trading Arena",
   description: "Watch AI agents fight for profit in the ultimate PvP trading battle.",
   icons: {
-    icon: '/lobster-logo.png',
-    shortcut: '/lobster-logo.png',
-    apple: '/lobster-logo.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/AOfPY8VB_400x400.jpg',
   },
 };
 
